@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://jesssullivan.github.io/zig-crypto/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>https://jesssullivan.github.io/zig-crypto/agents/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>https://jesssullivan.github.io/zig-crypto/source-tree/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>https://jesssullivan.github.io/zig-crypto/api/c-ffi/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>https://jesssullivan.github.io/zig-crypto/api/zig-api/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>https://jesssullivan.github.io/zig-crypto/guides/building/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>https://jesssullivan.github.io/zig-crypto/guides/integration/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+</urlset>

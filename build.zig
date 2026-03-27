@@ -45,6 +45,8 @@ pub fn build(b: *std.Build) void {
     inline for (.{
         .{ .file = "tests/pbt_sha256.zig", .mod = "sha256" },
         .{ .file = "tests/pbt_aes.zig", .mod = "aes" },
+        .{ .file = "tests/pbt_ecdh.zig", .mod = "ecdh" },
+        .{ .file = "tests/pbt_ed25519.zig", .mod = "ed25519" },
     }) |entry| {
         const t = b.addTest(.{
             .root_module = b.createModule(.{

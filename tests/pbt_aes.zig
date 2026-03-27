@@ -27,7 +27,7 @@ test "PBT: AES-128-CBC encrypt-decrypt round-trip" {
 }
 
 test "PBT: AES-128-CBC ciphertext length is always block-aligned" {
-    var prng = std.Random.DefaultPrng.init(0xBL0CK);
+    var prng = std.Random.DefaultPrng.init(0xB10CCA1);
     const random = prng.random();
 
     for (0..500) |_| {

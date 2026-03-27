@@ -8,8 +8,8 @@ zig-crypto/
 │       └── docs.yml
 ├── docs/
 │   ├── api/
-│   │   ├── c-ffi.md  (C FFI API Reference: zig-crypto)
-│   │   └── zig-api.md  (Zig API Reference: zig-crypto)
+│   │   ├── c-ffi.md  (C FFI Reference)
+│   │   └── zig-api.md  (Zig API Reference)
 │   ├── guides/
 │   │   ├── building.md  (Building)
 │   │   └── integration.md  (Integration Guide)

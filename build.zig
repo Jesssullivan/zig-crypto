@@ -26,6 +26,8 @@ pub fn build(b: *std.Build) void {
         "src/aes.zig",
         "src/pbkdf2.zig",
         "src/random.zig",
+        "src/ecdh.zig",
+        "src/ed25519.zig",
     }) |test_file| {
         const t = b.addTest(.{
             .root_module = b.createModule(.{

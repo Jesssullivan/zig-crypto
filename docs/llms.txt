@@ -1,0 +1,61 @@
+# zig-crypto
+
+> Portable cryptographic primitives in Zig with C FFI
+
+## Overview
+
+zig-crypto provides SHA-256, HMAC-SHA-256, AES-128/256-CBC, PBKDF2-SHA1, ECDH P-256, Ed25519, and CSPRNG -- all as pure Zig with a C FFI for integration into Swift, C, and other languages.
+
+## Key Facts
+
+- Language: Zig 0.15.2+
+- Platforms: macOS, Linux (pure Zig, no platform deps except CSPRNG)
+- License: Zlib OR MIT
+- API: C FFI via zig_crypto.h
+
+## C API Summary
+
+SHA-256:
+- zig_crypto_sha256() -- compute hash (32 bytes)
+- zig_crypto_sha256_hex() -- compute hash as hex string (64 chars)
+
+HMAC-SHA-256:
+- zig_crypto_hmac_sha256() -- keyed MAC (32 bytes)
+
+AES-CBC:
+- zig_crypto_aes128_cbc_encrypt/decrypt() -- AES-128 with PKCS#7
+- zig_crypto_aes256_cbc_encrypt/decrypt() -- AES-256 with PKCS#7
+- zig_crypto_aes256_cbc_encrypt_raw/decrypt_raw() -- AES-256 no padding (for CTAP2)
+
+PBKDF2:
+- zig_crypto_pbkdf2_sha1() -- key derivation
+
+ECDH P-256:
+- zig_crypto_p256_generate() -- ephemeral key pair
+- zig_crypto_p256_ecdh() -- shared secret derivation
+
+Ed25519:
+- zig_crypto_ed25519_generate() -- random key pair
+- zig_crypto_ed25519_from_seed() -- deterministic key pair
+- zig_crypto_ed25519_sign() -- sign message
+- zig_crypto_ed25519_verify() -- verify signature
+
+CSPRNG:
+- zig_crypto_random() -- fill buffer with secure random bytes
+
+## Source Files
+
+- src/ffi.zig -- C FFI exports
+- src/sha256.zig -- SHA-256
+- src/hmac.zig -- HMAC-SHA-256
+- src/aes.zig -- AES-128/256-CBC
+- src/pbkdf2.zig -- PBKDF2-SHA1
+- src/ecdh.zig -- ECDH P-256
+- src/ed25519.zig -- Ed25519
+- src/random.zig -- CSPRNG
+- include/zig_crypto.h -- C header
+
+## Links
+
+- Repository: https://github.com/Jesssullivan/zig-crypto
+- Documentation: https://jesssullivan.github.io/zig-crypto/

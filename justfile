@@ -21,6 +21,8 @@ test:
     zig test src/aes.zig {{ZIG_TARGET}}
     zig test src/pbkdf2.zig {{ZIG_TARGET}}
     zig test src/random.zig {{ZIG_TARGET}}
+    zig test src/ecdh.zig {{ZIG_TARGET}}
+    zig test src/ed25519.zig {{ZIG_TARGET}}
 
 # Run property-based tests
 test-pbt:

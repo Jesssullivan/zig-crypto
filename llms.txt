@@ -1,0 +1,51 @@
+# zig-crypto
+
+> Portable cryptographic primitives in Zig with C FFI -- SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG. No OpenSSL. No system dependencies.
+
+Part of the [Tinyland Zig Libraries](https://libs.tinyland.dev).
+
+## Installation
+
+```
+zig fetch --save git+https://github.com/Jesssullivan/zig-crypto.git
+```
+
+## Full Documentation
+
+- [API reference](https://libs.tinyland.dev/api/zig-crypto/): Zig autodoc
+- [llms-full.txt](https://raw.githubusercontent.com/Jesssullivan/zig-crypto/main/llms-full.txt): Complete API dump for LLMs
+- [AGENTS.md](https://github.com/Jesssullivan/zig-crypto/blob/main/AGENTS.md): Agent instructions
+
+## C API (19 functions)
+
+- `zig_crypto_sha256(data, len, out)`: SHA-256 hash (out: 32 bytes)
+- `zig_crypto_sha256_hex(data, len, out)`: SHA-256 hex string (out: 64 bytes)
+- `zig_crypto_hmac_sha256(key, key_len, data, len, out)`: HMAC-SHA-256 (out: 32 bytes)
+- `zig_crypto_aes128_cbc_encrypt(key, iv, pt, pt_len, out)`: AES-128-CBC encrypt, PKCS#7
+- `zig_crypto_aes128_cbc_decrypt(key, iv, ct, ct_len, out)`: AES-128-CBC decrypt, PKCS#7
+- `zig_crypto_aes256_cbc_encrypt(key, iv, pt, pt_len, out)`: AES-256-CBC encrypt, PKCS#7
+- `zig_crypto_aes256_cbc_decrypt(key, iv, ct, ct_len, out)`: AES-256-CBC decrypt, PKCS#7
+- `zig_crypto_aes256_cbc_encrypt_raw(key, iv, pt, pt_len, out)`: AES-256-CBC raw (CTAP2)
+- `zig_crypto_aes256_cbc_decrypt_raw(key, iv, ct, ct_len, out)`: AES-256-CBC raw (CTAP2)
+- `zig_crypto_pbkdf2_sha1(pass, pass_len, salt, salt_len, iters, out, out_len)`: PBKDF2-SHA1
+- `zig_crypto_p256_generate(scalar, pub_x, pub_y)`: P-256 keygen (0/-1)
+- `zig_crypto_p256_ecdh(scalar, peer_x, peer_y, shared)`: ECDH shared secret (0/-1)
+- `zig_crypto_ed25519_generate(seed, pub, signing)`: Ed25519 keygen
+- `zig_crypto_ed25519_from_seed(seed, pub, signing)`: Ed25519 from seed (0/-1)
+- `zig_crypto_ed25519_sign(msg, len, signing, sig)`: Ed25519 sign (0/-1)
+- `zig_crypto_ed25519_verify(msg, len, sig, pub)`: Ed25519 verify (bool)
+- `zig_crypto_random(buf, len)`: Secure random bytes (bool)
+
+## Build
+
+```
+zig build                    # build static library
+zig build test               # run unit tests
+zig build test-pbt           # property-based tests
+zig build docs               # generate API docs
+```
+
+## Platform Support
+
+- Cross-platform (Zig standard library only, no system crypto dependencies)
+

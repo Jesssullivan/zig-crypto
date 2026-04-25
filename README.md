@@ -21,6 +21,30 @@ A minimal, zero-dependency crypto library that compiles to a static C library fr
 - **C FFI**: 19 exported functions
 - **Property-based tests**: Roundtrip tests for SHA-256, AES, ECDH, Ed25519
 
+## Installation
+
+### Zig Package Manager (recommended)
+
+```bash
+zig fetch --save git+https://github.com/Jesssullivan/zig-crypto.git
+```
+
+Then in your `build.zig`:
+
+```zig
+const dep = b.dependency("zig-crypto", .{ .target = target, .optimize = optimize });
+exe.root_module.addImport("zig-crypto", dep.module("zig-crypto"));
+```
+
+### Git Submodule (C FFI consumers)
+
+```bash
+git submodule add https://github.com/Jesssullivan/zig-crypto.git vendor/crypto
+cd vendor/crypto && zig build -Doptimize=ReleaseFast
+```
+
+Link `-lzig-crypto` and include `#include "zig_crypto.h"`.
+
 ## Requirements
 
 - Zig 0.15.2+

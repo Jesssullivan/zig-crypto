@@ -9,6 +9,7 @@ const ed25519 = @import("ed25519.zig");
 
 // ── SHA-256 ─────────────────────────────────────────────────────────────
 
+/// Compute SHA-256 hash. Writes 32 bytes to `out`.
 export fn zig_crypto_sha256(
     data: [*]const u8,
     data_len: usize,
@@ -35,6 +36,7 @@ export fn zig_crypto_sha256_hex(
 
 // ── HMAC-SHA-256 ────────────────────────────────────────────────────────
 
+/// Compute HMAC-SHA-256. Writes 32 bytes to `out`.
 export fn zig_crypto_hmac_sha256(
     key: [*]const u8,
     key_len: usize,
@@ -48,6 +50,7 @@ export fn zig_crypto_hmac_sha256(
 
 // ── AES-128-CBC ─────────────────────────────────────────────────────────
 
+/// AES-128-CBC encrypt with PKCS#7 padding. Returns ciphertext length or -1.
 export fn zig_crypto_aes128_cbc_encrypt(
     key: *const [16]u8,
     iv: *const [16]u8,
@@ -59,6 +62,7 @@ export fn zig_crypto_aes128_cbc_encrypt(
     return @intCast(ct_len);
 }
 
+/// AES-128-CBC decrypt with PKCS#7 unpadding. Returns plaintext length or -1.
 export fn zig_crypto_aes128_cbc_decrypt(
     key: *const [16]u8,
     iv: *const [16]u8,
@@ -72,6 +76,7 @@ export fn zig_crypto_aes128_cbc_decrypt(
 
 // ── AES-256-CBC ─────────────────────────────────────────────────────────
 
+/// AES-256-CBC encrypt with PKCS#7 padding. Returns ciphertext length or -1.
 export fn zig_crypto_aes256_cbc_encrypt(
     key: *const [32]u8,
     iv: *const [16]u8,
@@ -83,6 +88,7 @@ export fn zig_crypto_aes256_cbc_encrypt(
     return @intCast(ct_len);
 }
 
+/// AES-256-CBC decrypt with PKCS#7 unpadding. Returns plaintext length or -1.
 export fn zig_crypto_aes256_cbc_decrypt(
     key: *const [32]u8,
     iv: *const [16]u8,
@@ -94,7 +100,7 @@ export fn zig_crypto_aes256_cbc_decrypt(
     return @intCast(pt_len);
 }
 
-/// AES-256-CBC raw (no padding). For CTAP2 PIN protocol.
+/// AES-256-CBC encrypt without padding (raw blocks). `plaintext_len` must be a multiple of 16. For CTAP2 PIN protocol.
 export fn zig_crypto_aes256_cbc_encrypt_raw(
     key: *const [32]u8,
     iv: *const [16]u8,
@@ -106,6 +112,7 @@ export fn zig_crypto_aes256_cbc_encrypt_raw(
     return @intCast(ct_len);
 }
 
+/// AES-256-CBC decrypt without unpadding (raw blocks). `ciphertext_len` must be a multiple of 16. For CTAP2 PIN protocol.
 export fn zig_crypto_aes256_cbc_decrypt_raw(
     key: *const [32]u8,
     iv: *const [16]u8,
@@ -119,6 +126,7 @@ export fn zig_crypto_aes256_cbc_decrypt_raw(
 
 // ── PBKDF2-SHA1 ─────────────────────────────────────────────────────────
 
+/// PBKDF2 with HMAC-SHA1. Derives `out_len` bytes of key material.
 export fn zig_crypto_pbkdf2_sha1(
     passphrase: [*]const u8,
     passphrase_len: usize,
@@ -215,6 +223,7 @@ export fn zig_crypto_ed25519_verify(
 
 // ── CSPRNG ──────────────────────────────────────────────────────────────
 
+/// Fill buffer with cryptographically secure random bytes. Returns true on success.
 export fn zig_crypto_random(buf: [*]u8, len: usize) bool {
     random.fill(buf[0..len]) catch return false;
     return true;

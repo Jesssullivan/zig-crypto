@@ -38,7 +38,7 @@ pub fn build(b: *std.Build) void {
         .linkage = .static,
     });
     const install_docs = b.addInstallDirectory(.{
-        .source = docs_lib.getEmittedDocs(),
+        .source_dir = docs_lib.getEmittedDocs(),
         .install_dir = .prefix,
         .install_subdir = "docs",
     });

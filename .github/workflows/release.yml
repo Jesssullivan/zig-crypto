@@ -26,6 +26,9 @@ jobs:
       - name: Run tests
         run: zig build test && zig build test-pbt
 
+      - name: Build and run C example
+        run: zig build example
+
       - name: Generate autodoc
         run: zig build docs
 

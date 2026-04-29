@@ -11,7 +11,7 @@
 zig build -Doptimize=ReleaseFast
 ```
 
-Produces `zig-out/lib/libzig_crypto.a` with the C header at `include/zig_crypto.h`.
+Produces `zig-out/lib/libzig-crypto.a` with the C header at `include/zig_crypto.h`.
 
 ## With just
 
@@ -36,6 +36,9 @@ zig build test
 
 # Property-based tests
 zig build test-pbt
+
+# C example
+zig build example
 ```
 
 ## Cross-Compilation

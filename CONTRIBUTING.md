@@ -11,7 +11,7 @@ zig fetch --save git+https://github.com/Jesssullivan/zig-crypto.git
 Then in your `build.zig`:
 
 ```zig
-const dep = b.dependency("zig-crypto", .{ .target = target, .optimize = optimize });
+const dep = b.dependency("zig_crypto", .{ .target = target, .optimize = optimize });
 exe.root_module.addImport("zig-crypto", dep.module("zig-crypto"));
 ```
 

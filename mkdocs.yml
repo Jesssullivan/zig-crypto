@@ -1,6 +1,6 @@
 site_name: zig-crypto
-site_url: https://jesssullivan.github.io/zig-crypto/
-site_description: Portable cryptographic primitives in Zig — SHA-256, HMAC, AES, ECDH, Ed25519, PBKDF2
+site_url: https://libs.tinyland.dev/zig-crypto/
+site_description: Portable cryptographic primitives in Zig with a stable C FFI
 repo_url: https://github.com/Jesssullivan/zig-crypto
 repo_name: Jesssullivan/zig-crypto
 

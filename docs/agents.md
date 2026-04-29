@@ -4,7 +4,7 @@ Instructions for AI agents working with this codebase.
 
 ## Project
 
-zig-crypto provides portable cryptographic primitives in Zig with a C FFI. Used by zig-ctap2 for FIDO2 PIN protocol v2.
+zig-crypto provides portable cryptographic primitives in Zig with a stable C FFI. Used by zig-ctap2 for FIDO2 PIN protocol v2 and as the crypto proof for the Tinyland Zig Libraries de-attestation FFI pattern.
 
 ## Build
 
@@ -12,11 +12,13 @@ zig-crypto provides portable cryptographic primitives in Zig with a C FFI. Used 
 zig build -Doptimize=ReleaseFast    # static library
 zig build test                       # unit tests
 zig build test-pbt                   # property-based tests
+zig build example                    # build and run C example
 ```
 
 ## Structure
 
 - `include/zig_crypto.h` -- Public C API header
+- `src/root.zig` -- Zig package API root
 - `src/ffi.zig` -- C FFI export layer
 - `src/sha256.zig` -- SHA-256 hash
 - `src/hmac.zig` -- HMAC-SHA-256

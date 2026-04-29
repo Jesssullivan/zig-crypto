@@ -4,7 +4,7 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    const root_module = b.createModule(.{
+    const ffi_module = b.createModule(.{
         .root_source_file = b.path("src/ffi.zig"),
         .target = target,
         .optimize = optimize,
@@ -12,7 +12,7 @@ pub fn build(b: *std.Build) void {
 
     // Zig module for package manager consumers
     _ = b.addModule("zig-crypto", .{
-        .root_source_file = b.path("src/ffi.zig"),
+        .root_source_file = b.path("src/root.zig"),
         .target = target,
         .optimize = optimize,
     });
@@ -20,7 +20,7 @@ pub fn build(b: *std.Build) void {
     // Static library for C FFI consumers
     const lib = b.addLibrary(.{
         .name = "zig-crypto",
-        .root_module = root_module,
+        .root_module = ffi_module,
         .linkage = .static,
     });
 
@@ -28,26 +28,39 @@ pub fn build(b: *std.Build) void {
 
     // Documentation generation
     const docs_step = b.step("docs", "Generate API documentation");
-    const docs_lib = b.addLibrary(.{
-        .name = "zig-crypto",
-        .root_module = b.createModule(.{
-            .root_source_file = b.path("src/ffi.zig"),
-            .target = target,
-            .optimize = optimize,
-        }),
-        .linkage = .static,
-    });
     const install_docs = b.addInstallDirectory(.{
-        .source_dir = docs_lib.getEmittedDocs(),
+        .source_dir = lib.getEmittedDocs(),
         .install_dir = .prefix,
         .install_subdir = "docs",
     });
     docs_step.dependOn(&install_docs.step);
 
+    // C example
+    const example_step = b.step("example", "Build and run the C example");
+    const example_module = b.createModule(.{
+        .target = target,
+        .optimize = optimize,
+    });
+    example_module.link_libc = true;
+    example_module.addIncludePath(b.path("include"));
+    example_module.addCSourceFile(.{
+        .file = b.path("examples/hash_and_sign.c"),
+        .flags = &.{ "-std=c99", "-Wall", "-Wextra" },
+    });
+    example_module.linkLibrary(lib);
+
+    const example = b.addExecutable(.{
+        .name = "hash_and_sign",
+        .root_module = example_module,
+    });
+    const run_example = b.addRunArtifact(example);
+    example_step.dependOn(&run_example.step);
+
     // Unit tests
     const test_step = b.step("test", "Run unit tests");
 
     inline for (.{
+        "src/root.zig",
         "src/sha256.zig",
         "src/hmac.zig",
         "src/aes.zig",

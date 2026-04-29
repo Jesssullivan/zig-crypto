@@ -1,12 +1,19 @@
 # zig-crypto
 
-Portable cryptographic primitives in Zig with C FFI -- SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG.
+Portable cryptographic primitives in Zig with a stable C FFI -- SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG.
 
-**License:** Zlib OR MIT
+- **License:** Zlib OR MIT
+- **Docs:** <https://libs.tinyland.dev/zig-crypto/>
 
 ## Why
 
-A minimal, zero-dependency crypto library that compiles to a static C library from Zig. No OpenSSL, no CommonCrypto, no system dependencies. Provides the cryptographic primitives needed by CTAP2 PIN protocol, Sparkle update signing, and general-purpose credential management.
+zig-crypto is a small native capability layer for applications that need portable crypto without binding core behavior to one platform's framework surface. It compiles to a static library, exposes a narrow C ABI, and uses Zig's `std.crypto` instead of OpenSSL, CommonCrypto, or other system crypto dependencies.
+
+It is part of the Tinyland Zig Libraries pattern: use Zig to build hermetic native libraries with stable FFI contracts so Swift, C, C++, Zig, Python, GTK, WebKit, or other application layers can share the same primitives across macOS and Linux. The goal is portability and auditability: keep app-level developer experience intact while moving framework-bound capabilities behind small, documented native interfaces.
+
+Framed as de-attestation, Zig owns the native capability contract while application code keeps its presentation and workflow layer. A SwiftUI, Cocoa, GTK, or WebKit app can move Apple-only crypto, keychain, notification, or CTAP2 assumptions behind a C ABI that can also be implemented and tested on Linux, without rewriting the whole application around one ecosystem's APIs.
+
+zig-crypto is the pure-Zig crypto proof in that family. Sibling libraries apply the same shape to keychain storage, desktop notifications, and CTAP2/WebAuthn-style device flows.
 
 ## Features
 
@@ -18,7 +25,8 @@ A minimal, zero-dependency crypto library that compiles to a static C library fr
 - **ECDH P-256**: Key generation and shared secret derivation
 - **Ed25519**: Key generation, signing, verification
 - **CSPRNG**: OS-backed cryptographically secure random bytes
-- **C FFI**: 19 exported functions
+- **C FFI**: 17 exported functions
+- **Zig package API**: `src/root.zig` exposes the primitive modules for Zig consumers
 - **Property-based tests**: Roundtrip tests for SHA-256, AES, ECDH, Ed25519
 
 ## Installation
@@ -32,7 +40,7 @@ zig fetch --save git+https://github.com/Jesssullivan/zig-crypto.git
 Then in your `build.zig`:
 
 ```zig
-const dep = b.dependency("zig-crypto", .{ .target = target, .optimize = optimize });
+const dep = b.dependency("zig_crypto", .{ .target = target, .optimize = optimize });
 exe.root_module.addImport("zig-crypto", dep.module("zig-crypto"));
 ```
 
@@ -54,7 +62,8 @@ Link `-lzig-crypto` and include `#include "zig_crypto.h"`.
 
 ```mermaid
 graph TD
-    A[Application] -->|C FFI| B[ffi.zig<br/>19 exported functions]
+    A[Application] -->|C ABI| B[ffi.zig<br/>17 exported functions]
+    A -->|Zig package| R[root.zig]
     B --> C[sha256.zig]
     B --> D[hmac.zig]
     B --> E[aes.zig]
@@ -62,6 +71,13 @@ graph TD
     B --> G[ecdh.zig]
     B --> H[ed25519.zig]
     B --> I[random.zig]
+    R --> C
+    R --> D
+    R --> E
+    R --> F
+    R --> G
+    R --> H
+    R --> I
     C --> Z[std.crypto]
     D --> Z
     E --> Z
@@ -77,6 +93,8 @@ graph TD
 zig build -Doptimize=ReleaseFast   # static library
 zig build test                      # unit tests
 zig build test-pbt                  # property-based tests
+zig build docs                      # generate API documentation
+zig build example                   # build and run C example
 ```
 
 With [just](https://just.systems): `just test-all`, `just build`, `just info`.
@@ -88,6 +106,19 @@ With [just](https://just.systems): `just test-all`, `just build`, `just info`.
 | macOS (arm64/x86_64) | Tested | No frameworks needed |
 | Linux (x86_64/arm64) | Supported | No system libraries needed |
 | Cross-compilation | Supported | Pure Zig, no platform dependencies |
+
+## Tinyland Zig Libraries
+
+The library family targets small native surfaces that are often tangled with platform frameworks or entitlement/provisioning flows:
+
+| Library | Surface | Portable role |
+|---------|---------|---------------|
+| `zig-crypto` | Crypto primitives | Pure Zig static library and C ABI for hashes, MACs, AES, PBKDF2, P-256, Ed25519, and CSPRNG |
+| `zig-keychain` | Secret storage | C ABI for macOS Security.framework-style keychain storage and Linux Secret Service/libsecret |
+| `zig-notify` | Desktop notifications | C ABI for platform notification delivery |
+| `zig-ctap2` | FIDO2/WebAuthn device flows | C ABI for CTAP2 HID, makeCredential/getAssertion, and PIN protocol |
+
+Each library should stay small enough to audit, package, and link independently.
 
 ## C API Reference
 

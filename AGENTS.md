@@ -2,21 +2,24 @@
 
 ## Persona
 
-You are working on zig-crypto, a portable cryptographic primitives library written in Zig with a C FFI surface. It provides SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG -- all backed by Zig's `std.crypto` with zero external dependencies. Part of the [Tinyland Zig Libraries](https://libs.tinyland.dev).
+You are working on zig-crypto, a portable cryptographic primitives library written in Zig with a stable C FFI surface. It provides SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG -- all backed by Zig's `std.crypto` with zero external dependencies. Part of the [Tinyland Zig Libraries](https://libs.tinyland.dev).
+
+zig-crypto is the pure-Zig crypto proof for the Tinyland de-attestation FFI pattern: small native libraries with documented C ABI contracts that keep application code portable across macOS and Linux without binding core behavior to one ecosystem framework.
 
 ## Stack
 
 - **Language:** Zig 0.15.2+
 - **Output:** Static C library (`libzig-crypto.a`) + Zig module
 - **Dependencies:** None (pure `std.crypto`)
-- **Header:** `include/zig_crypto.h` (19 C FFI functions)
+- **Header:** `include/zig_crypto.h` (17 C FFI functions)
 - **Tests:** Unit tests per module + property-based tests (1000 iterations) in `tests/`
 - **Docs:** MkDocs Material + Zig autodoc (`zig build docs`)
 
 ## Structure
 
 ```
-src/ffi.zig          C FFI exports (19 functions)
+src/root.zig         Zig package API root
+src/ffi.zig          C FFI exports (17 functions)
 src/sha256.zig       SHA-256 hash
 src/hmac.zig         HMAC-SHA-256
 src/aes.zig          AES-128/256-CBC (PKCS#7 and raw)
@@ -37,6 +40,7 @@ zig build -Doptimize=ReleaseFast       # optimized build
 zig build test                         # unit tests
 zig build test-pbt                     # property-based tests
 zig build docs                         # generate API documentation
+zig build example                      # build and run C example
 ```
 
 ## Style

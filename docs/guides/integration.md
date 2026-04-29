@@ -1,5 +1,13 @@
 # Integration Guide
 
+zig-crypto is meant to sit behind application code as a small portable native boundary. Use the Zig package API when the consumer is Zig, and use the C ABI when integrating with Swift, C, C++, Python, GTK, WebKit, or another runtime with C interop.
+
+## FFI De-attestation Boundary
+
+Treat the C ABI as the stable contract between application developer experience and native capability implementation. For example, a SwiftUI or Cocoa application can keep its UI and app lifecycle code while moving crypto behavior behind `zig_crypto.h`; the same contract can be linked from a Linux-native GTK, WebKit, or CLI application.
+
+This keeps platform-specific framework assumptions out of the core application model. In sibling libraries, the same shape applies to keychain storage, notifications, and CTAP2/WebAuthn device flows.
+
 ## As a Zig Dependency
 
 Add to your `build.zig.zon`:
@@ -19,7 +27,7 @@ const crypto_dep = b.dependency("zig_crypto", .{
     .target = target,
     .optimize = optimize,
 });
-exe.linkLibrary(crypto_dep.artifact("zig_crypto"));
+exe.root_module.addImport("zig-crypto", crypto_dep.module("zig-crypto"));
 ```
 
 ## As a C Static Library
@@ -30,7 +38,7 @@ Build the library:
 zig build -Doptimize=ReleaseFast
 ```
 
-Link against `zig-out/lib/libzig_crypto.a` and include `include/zig_crypto.h`:
+Link against `zig-out/lib/libzig-crypto.a` and include `include/zig_crypto.h`:
 
 ```c
 #include "zig_crypto.h"
@@ -50,7 +58,7 @@ int main() {
 
 ## Swift Integration
 
-1. Add `libzig_crypto.a` and `zig_crypto.h` to your Xcode project
+1. Add `libzig-crypto.a` and `zig_crypto.h` to your Xcode project
 2. Add `zig_crypto.h` to your bridging header
 3. Link the static library
 

@@ -1,8 +1,12 @@
 # zig-crypto -- Complete API Reference
 
-> Portable cryptographic primitives in Zig with C FFI -- SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG. No OpenSSL. No system dependencies.
+> Portable cryptographic primitives in Zig with a stable C FFI -- SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG. No OpenSSL. No CommonCrypto. No system crypto dependencies.
 
 Part of the [Tinyland Zig Libraries](https://libs.tinyland.dev). License: Zlib OR MIT.
+
+zig-crypto is the pure-Zig crypto proof for a family of small native capability layers. The shared pattern is a hermetic Zig implementation, a stable C ABI for app integration, and a Zig package root for direct Zig consumers. Sibling libraries apply the same approach to keychain storage, desktop notifications, and CTAP2/WebAuthn-style device flows.
+
+Positioning: Zig provides the de-attestation layer between Apple/SwiftUI or other ecosystem-specific app developer experience and portable Linux-capable native implementations. The C ABI is the stable contract; the Zig implementation is the hermetic capability surface.
 
 ## Installation
 
@@ -13,7 +17,7 @@ zig fetch --save git+https://github.com/Jesssullivan/zig-crypto.git
 Then in build.zig:
 
 ```zig
-const dep = b.dependency("zig-crypto", .{ .target = target, .optimize = optimize });
+const dep = b.dependency("zig_crypto", .{ .target = target, .optimize = optimize });
 exe.root_module.addImport("zig-crypto", dep.module("zig-crypto"));
 ```
 
@@ -28,7 +32,8 @@ Link `-lzig-crypto`. Include `#include "zig_crypto.h"`.
 
 ## Source Structure
 
-- `src/ffi.zig` - C FFI exports (19 functions)
+- `src/root.zig` - Zig package API root
+- `src/ffi.zig` - C FFI exports (17 functions)
 - `src/sha256.zig` - SHA-256 hash (single-shot and incremental)
 - `src/hmac.zig` - HMAC-SHA-256
 - `src/aes.zig` - AES-128/256-CBC (PKCS#7 and raw modes)
@@ -36,7 +41,7 @@ Link `-lzig-crypto`. Include `#include "zig_crypto.h"`.
 - `src/ecdh.zig` - ECDH P-256 key agreement
 - `src/ed25519.zig` - Ed25519 digital signatures
 - `src/random.zig` - OS-backed CSPRNG
-- `include/zig_crypto.h` - C header (19 functions + size constants)
+- `include/zig_crypto.h` - C header (17 functions + size constants)
 - `tests/pbt_*.zig` - Property-based tests (1000-iteration roundtrips)
 - `examples/hash_and_sign.c` - C usage example
 
@@ -147,6 +152,7 @@ zig build -Doptimize=ReleaseFast # optimized build
 zig build test                   # unit tests
 zig build test-pbt               # property-based tests (1000 iterations)
 zig build docs                   # generate API docs
+zig build example                # build and run C example
 ```
 
 ## Platform Support

@@ -1,8 +1,16 @@
 # zig-crypto
 
-Portable cryptographic primitives in Zig -- SHA-256, HMAC, AES-CBC, ECDH P-256, Ed25519, PBKDF2, and CSPRNG with a C FFI.
+Portable cryptographic primitives in Zig with a stable C FFI -- SHA-256, HMAC, AES-CBC, ECDH P-256, Ed25519, PBKDF2, and CSPRNG.
 
 **License:** Zlib OR MIT
+
+## Purpose
+
+zig-crypto is a hermetic native capability layer for applications that need portable crypto without binding core behavior to one platform's crypto framework. It builds a static library from Zig, exposes 17 C ABI functions, and also provides a Zig package root for direct Zig consumers.
+
+The de-attestation boundary is the C ABI: application code can keep its SwiftUI, Cocoa, GTK, WebKit, or Zig-facing developer experience while crypto behavior moves into a small implementation that can be built, tested, and linked on macOS or Linux.
+
+This is the crypto proof for the Tinyland Zig Libraries pattern: use small Zig libraries with documented FFI contracts to move framework-bound native capabilities behind portable, auditable interfaces. The same pattern applies to keychain storage, desktop notifications, and CTAP2/WebAuthn-style device flows in sibling libraries.
 
 ## Features
 
@@ -13,7 +21,8 @@ Portable cryptographic primitives in Zig -- SHA-256, HMAC, AES-CBC, ECDH P-256, 
 - **ECDH P-256**: Ephemeral key generation and shared secret derivation
 - **Ed25519**: Key generation, signing, and verification
 - **CSPRNG**: Cryptographically secure random bytes
-- **C FFI**: All primitives exported for Swift, C, C++ interop
+- **C FFI**: 17 exported functions for Swift, C, C++ interop
+- **Zig API**: `src/root.zig` exposes primitive modules for Zig consumers
 
 ## Quick Start
 
@@ -24,13 +33,17 @@ zig build -Doptimize=ReleaseFast
 # Run tests
 zig build test
 zig build test-pbt
+
+# Build and run the C example
+zig build example
 ```
 
 ## Architecture
 
 ```mermaid
 graph TD
-    A[Application] -->|C FFI| B[ffi.zig]
+    A[Application] -->|C ABI| B[ffi.zig]
+    A -->|Zig package| R[root.zig]
     B --> C[sha256.zig]
     B --> D[hmac.zig]
     B --> E[aes.zig]
@@ -38,6 +51,13 @@ graph TD
     B --> G[ecdh.zig]
     B --> H[ed25519.zig]
     B --> I[random.zig]
+    R --> C
+    R --> D
+    R --> E
+    R --> F
+    R --> G
+    R --> H
+    R --> I
 ```
 
 ## Source Tree
@@ -48,6 +68,7 @@ zig-crypto/
   include/
     zig_crypto.h       -- C header (public API)
   src/
+    root.zig           -- Zig package API root
     ffi.zig            -- C FFI exports
     sha256.zig         -- SHA-256 hash
     hmac.zig           -- HMAC-SHA-256

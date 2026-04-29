@@ -1,17 +1,21 @@
 # zig-crypto
 
-> Portable cryptographic primitives in Zig with C FFI
+> Portable cryptographic primitives in Zig with a stable C FFI
 
 ## Overview
 
-zig-crypto provides SHA-256, HMAC-SHA-256, AES-128/256-CBC, PBKDF2-SHA1, ECDH P-256, Ed25519, and CSPRNG -- all as pure Zig with a C FFI for integration into Swift, C, and other languages.
+zig-crypto provides SHA-256, HMAC-SHA-256, AES-128/256-CBC, PBKDF2-SHA1, ECDH P-256, Ed25519, and CSPRNG -- all as pure Zig with a stable C ABI for integration into Swift, C, C++, Zig, Python, GTK, WebKit, and other application layers.
+
+It is the crypto proof for the Tinyland Zig Libraries pattern: small native libraries with documented FFI contracts that let applications move framework-bound capabilities behind portable, auditable interfaces for macOS and Linux.
+
+Positioning: use Zig as a hermetic FFI surface for de-attesting Apple/SwiftUI or other ecosystem-specific native capabilities into portable C ABI contracts that can also be implemented and tested on Linux.
 
 ## Key Facts
 
 - Language: Zig 0.15.2+
 - Platforms: macOS, Linux (pure Zig, no platform deps except CSPRNG)
 - License: Zlib OR MIT
-- API: C FFI via zig_crypto.h
+- API: C FFI via zig_crypto.h, Zig package API via src/root.zig
 
 ## C API Summary
 
@@ -46,6 +50,7 @@ CSPRNG:
 ## Source Files
 
 - src/ffi.zig -- C FFI exports
+- src/root.zig -- Zig package API root
 - src/sha256.zig -- SHA-256
 - src/hmac.zig -- HMAC-SHA-256
 - src/aes.zig -- AES-128/256-CBC
@@ -58,4 +63,4 @@ CSPRNG:
 ## Links
 
 - Repository: https://github.com/Jesssullivan/zig-crypto
-- Documentation: https://jesssullivan.github.io/zig-crypto/
+- Documentation: https://libs.tinyland.dev/zig-crypto/

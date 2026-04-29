@@ -30,6 +30,7 @@ zig-crypto/
 │   ├── hmac.zig  (HMAC-SHA-256)
 │   ├── pbkdf2.zig  (PBKDF2-SHA1)
 │   ├── random.zig  (CSPRNG)
+│   ├── root.zig  (Zig package API root)
 │   └── sha256.zig  (SHA-256 hash)
 ├── tests/
 │   ├── pbt_aes.zig
@@ -43,8 +44,8 @@ zig-crypto/
 ├── .secrets.baseline
 ├── AGENTS.md  (AGENTS.md -- zig-crypto)
 ├── LICENSE  (License)
-├── LLMS.txt
 ├── README.md  (zig-crypto)
+├── build.zig.zon
 ├── build.zig
 ├── flake.nix  (Nix flake)
 ├── justfile  (Just task runner recipes)

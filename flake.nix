@@ -12,7 +12,38 @@
 
       perSystem = { pkgs, system, ... }:
         let
-          zig = pkgs.zig_0_14;  # closest available in nixpkgs; override if 0.15 lands
+          zigVersion = "0.15.2";
+          zigTargets = {
+            aarch64-darwin = {
+              name = "aarch64-macos";
+              hash = "sha256-PMK6s2fhhc37J1AcSzCxsGU8KNn3PfjckUiOZuzl+ms=";
+            };
+            aarch64-linux = {
+              name = "aarch64-linux";
+              hash = "sha256-lY7X0eANDqdlkNJ2Zu+/epMigbPXugxrAbD/JkmPZn8=";
+            };
+            x86_64-linux = {
+              name = "x86_64-linux";
+              hash = "sha256-AqonDxg9onbltZILHaxEpj8aSeVQUOveOuzJ64L5Mjk=";
+            };
+          };
+          zigTarget = zigTargets.${system} or (throw "zig-crypto flake does not provide Zig ${zigVersion} for ${system}");
+          zig = pkgs.stdenv.mkDerivation {
+            pname = "zig";
+            version = zigVersion;
+            src = pkgs.fetchurl {
+              url = "https://ziglang.org/download/${zigVersion}/zig-${zigTarget.name}-${zigVersion}.tar.xz";
+              hash = zigTarget.hash;
+            };
+            nativeBuildInputs = [ pkgs.gnutar pkgs.xz ];
+            dontConfigure = true;
+            dontBuild = true;
+            installPhase = ''
+              mkdir -p $out/bin $out/lib/zig
+              tar -xJf $src --strip-components=1 -C $out/lib/zig
+              ln -s $out/lib/zig/zig $out/bin/zig
+            '';
+          };
         in
         {
           devShells.default = pkgs.mkShell {

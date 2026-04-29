@@ -1,8 +1,12 @@
 # zig-crypto
 
-> Portable cryptographic primitives in Zig with C FFI -- SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG. No OpenSSL. No system dependencies.
+> Portable cryptographic primitives in Zig with a stable C FFI -- SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG. No OpenSSL. No CommonCrypto. No system crypto dependencies.
 
 Part of the [Tinyland Zig Libraries](https://libs.tinyland.dev).
+
+zig-crypto is the pure-Zig crypto proof for a family of small native capability layers. The pattern is a hermetic Zig implementation, a stable C ABI for app integration, and a Zig package root for direct Zig consumers.
+
+Positioning: Zig provides the de-attestation layer between Apple/SwiftUI or other ecosystem-specific app developer experience and portable Linux-capable native implementations.
 
 ## Installation
 
@@ -12,11 +16,13 @@ zig fetch --save git+https://github.com/Jesssullivan/zig-crypto.git
 
 ## Full Documentation
 
-- [API reference](https://libs.tinyland.dev/api/zig-crypto/): Zig autodoc
+- [Documentation](https://libs.tinyland.dev/zig-crypto/): MkDocs site
+- [C FFI reference](https://libs.tinyland.dev/zig-crypto/api/c-ffi/): C ABI docs
+- [Zig API reference](https://libs.tinyland.dev/zig-crypto/api/zig-api/): Zig module docs
 - [llms-full.txt](https://raw.githubusercontent.com/Jesssullivan/zig-crypto/main/llms-full.txt): Complete API dump for LLMs
 - [AGENTS.md](https://github.com/Jesssullivan/zig-crypto/blob/main/AGENTS.md): Agent instructions
 
-## C API (19 functions)
+## C API (17 functions)
 
 - `zig_crypto_sha256(data, len, out)`: SHA-256 hash (out: 32 bytes)
 - `zig_crypto_sha256_hex(data, len, out)`: SHA-256 hex string (out: 64 bytes)
@@ -43,9 +49,9 @@ zig build                    # build static library
 zig build test               # run unit tests
 zig build test-pbt           # property-based tests
 zig build docs               # generate API docs
+zig build example            # build and run C example
 ```
 
 ## Platform Support
 
 - Cross-platform (Zig standard library only, no system crypto dependencies)
-

@@ -32,6 +32,9 @@ jobs:
       - name: Run property-based tests
         run: zig build test-pbt
 
+      - name: Build and run C example
+        run: zig build example
+
   autodoc:
     name: Autodoc
     runs-on: ubuntu-latest

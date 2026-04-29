@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: pip install mkdocs-material pymdown-extensions
 
-      - name: Generate docs
+      - name: Generate MkDocs sources
         run: python scripts/gen_docs.py
 
       - name: Deploy docs

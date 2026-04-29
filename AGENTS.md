@@ -2,9 +2,11 @@
 
 ## Persona
 
-You are working on zig-crypto, a portable cryptographic primitives library written in Zig with a stable C FFI surface. It provides SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG -- all backed by Zig's `std.crypto` with zero external dependencies. Part of the [Tinyland Zig Libraries](https://libs.tinyland.dev).
+You are working on zig-crypto, a portable cryptographic primitives library written in Zig with a stable C FFI surface. It provides SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG -- all backed by Zig's `std.crypto` with zero external dependencies. Part of the Tinyland Zig Libraries.
 
-zig-crypto is the pure-Zig crypto proof for the Tinyland de-attestation FFI pattern: small native libraries with documented C ABI contracts that keep application code portable across macOS and Linux without binding core behavior to one ecosystem framework.
+zig-crypto is the pure-Zig crypto proof for the Tinyland de-attestation FFI pattern: small native libraries with documented C ABI contracts that keep application code portable across macOS and Linux without binding core behavior to one ecosystem framework. Public copy should make the Apple analogs concrete: this repo parallels CryptoKit SHA/HMAC/P-256/Curve25519.Signing primitives for SwiftUI, UIKit, AppKit, Cocoa, and Objective-C applications.
+
+It separately parallels CommonCrypto AES-CBC/PBKDF2-era calls and Security.framework random-byte calls. Keep public claims scoped to the verified crypto surface unless sibling repos have been audited separately.
 
 ## Stack
 
@@ -57,8 +59,10 @@ zig build example                      # build and run C example
 - **Do not** introduce OpenSSL, BoringSSL, CommonCrypto, or any C crypto dependency
 - **Do not** add allocator-dependent APIs to the FFI surface (all buffers are caller-provided)
 - **Do not** add runtime-configurable algorithm selection -- each function is a specific algorithm
+- **Do not** claim Swift/ObjC parity without naming the current gaps: SwiftPM/modulemap packaging, Swift convenience wrappers, Objective-C samples/nullability, error bridging, CommonCrypto-compatible aliases, CryptoKit `SharedSecret`/HKDF/key-type parity, CryptoKit AES-GCM/key-wrap parity, and streaming C contexts
 - **Do** keep the library stateless and thread-safe
 - **Do** ensure all new primitives have both unit tests and property-based tests
+- **Do** turn Apple interop gaps into small good-first issues when they do not change cryptographic behavior
 
 ## C FFI Exports (zig_crypto.h)
 

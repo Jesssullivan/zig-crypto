@@ -2,11 +2,13 @@
 
 zig-crypto is meant to sit behind application code as a small portable native boundary. Use the Zig package API when the consumer is Zig, and use the C ABI when integrating with Swift, C, C++, Python, GTK, WebKit, or another runtime with C interop.
 
-## FFI De-attestation Boundary
+## Portable C ABI Boundary
 
-Treat the C ABI as the stable contract between application developer experience and native capability implementation. For example, a SwiftUI or Cocoa application can keep its UI and app lifecycle code while moving crypto behavior behind `zig_crypto.h`; the same contract can be linked from a Linux-native GTK, WebKit, or CLI application.
+Treat the C ABI as the stable contract between application developer experience and native capability implementation. For example, a SwiftUI, UIKit, AppKit, Cocoa, or Objective-C application can keep its UI and app lifecycle code while moving CryptoKit, CommonCrypto, or Security.framework random-byte behavior behind `zig_crypto.h`; the same contract can be linked from a Linux-native GTK, WebKit, or CLI application.
 
-This keeps platform-specific framework assumptions out of the core application model. In sibling libraries, the same shape applies to keychain storage, notifications, and CTAP2/WebAuthn device flows.
+In Tinyland planning, this is the de-attestation shape: keep platform-specific framework assumptions out of the core application model by moving native capability behavior behind small, auditable ABI contracts. For this repo, the verified scope is crypto. Sibling libraries target keychain storage, notifications, and CTAP2/WebAuthn device flows, with their own implementation and platform-support status.
+
+For the Apple-specific parity matrix and good-first-issue gaps, see [Apple / Swift / Objective-C Interop](apple-interop.md).
 
 ## As a Zig Dependency
 

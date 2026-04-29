@@ -8,9 +8,13 @@ Portable cryptographic primitives in Zig with a stable C FFI -- SHA-256, HMAC, A
 
 zig-crypto is a hermetic native capability layer for applications that need portable crypto without binding core behavior to one platform's crypto framework. It builds a static library from Zig, exposes 17 C ABI functions, and also provides a Zig package root for direct Zig consumers.
 
-The de-attestation boundary is the C ABI: application code can keep its SwiftUI, Cocoa, GTK, WebKit, or Zig-facing developer experience while crypto behavior moves into a small implementation that can be built, tested, and linked on macOS or Linux.
+The stable boundary is the C ABI: application code can keep its SwiftUI, Cocoa, UIKit, Objective-C, GTK, WebKit, CLI, or Zig-facing developer experience while crypto behavior moves into a small implementation that can be built, tested, and linked on macOS or Linux.
 
-This is the crypto proof for the Tinyland Zig Libraries pattern: use small Zig libraries with documented FFI contracts to move framework-bound native capabilities behind portable, auditable interfaces. The same pattern applies to keychain storage, desktop notifications, and CTAP2/WebAuthn-style device flows in sibling libraries.
+In Tinyland planning, that boundary is part of the de-attestation effort: move native capability contracts out of ecosystem-specific framework assumptions and into portable, auditable Zig libraries. For `zig-crypto`, the concrete Apple analogs are CryptoKit SHA/HMAC/P-256/Curve25519.Signing primitives.
+
+CommonCrypto AES-CBC/PBKDF2-era calls and Security.framework random bytes are separate analogs. Sibling libraries for keychain storage, desktop notifications, and CTAP2/WebAuthn-style device flows carry their own implementation and platform-support status.
+
+See the [Apple interop guide](guides/apple-interop.md) for what is available today, what is not yet Swift/ObjC parity, and which gaps are good first issues.
 
 ## Features
 

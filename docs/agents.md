@@ -4,7 +4,9 @@ Instructions for AI agents working with this codebase.
 
 ## Project
 
-zig-crypto provides portable cryptographic primitives in Zig with a stable C FFI. Used by zig-ctap2 for FIDO2 PIN protocol v2 and as the crypto proof for the Tinyland Zig Libraries de-attestation FFI pattern.
+zig-crypto provides portable cryptographic primitives in Zig with a stable C FFI. It is the crypto proof for the Tinyland Zig Libraries pattern: small Zig implementations behind documented ABI contracts. In planning language, this supports the de-attestation effort; public claims should stay scoped to the verified crypto surface and should name the concrete Apple analogs: CryptoKit SHA/HMAC/P-256/Curve25519.Signing primitives for SwiftUI, UIKit, AppKit, Cocoa, and Objective-C applications.
+
+CommonCrypto AES-CBC/PBKDF2-era calls and Security.framework random bytes are separate analogs.
 
 ## Build
 

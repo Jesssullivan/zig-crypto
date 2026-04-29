@@ -1,35 +1,27 @@
 # zig-crypto — Portable cryptographic primitives
 # Run `just` to see all available recipes.
 
-ZIG_TARGET := if os() == "macos" { "-target aarch64-macos-none" } else { "" }
-
 default:
     @just --list
 
 # Build static library (ReleaseFast)
 build:
-    zig build -Doptimize=ReleaseFast {{ZIG_TARGET}}
+    zig build -Doptimize=ReleaseFast
 
 # Build debug library
 build-debug:
-    zig build {{ZIG_TARGET}}
+    zig build
 
 # Run unit tests
 test:
-    zig test src/sha256.zig {{ZIG_TARGET}}
-    zig test src/hmac.zig {{ZIG_TARGET}}
-    zig test src/aes.zig {{ZIG_TARGET}}
-    zig test src/pbkdf2.zig {{ZIG_TARGET}}
-    zig test src/random.zig {{ZIG_TARGET}}
-    zig test src/ecdh.zig {{ZIG_TARGET}}
-    zig test src/ed25519.zig {{ZIG_TARGET}}
+    zig build test
 
 # Run property-based tests
 test-pbt:
     zig build test-pbt
 
 # Run all tests (unit + PBT)
-test-all: test
+test-all: test test-pbt
 
 # Clean build artifacts
 clean:
@@ -62,7 +54,7 @@ nix-check:
 
 # Show library info
 info:
-    @echo "zig-crypto v0.1.0"
+    @echo "zig-crypto v0.1.1"
     @echo "License: Zlib OR MIT"
     @echo ""
     @echo "Source files:"

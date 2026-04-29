@@ -167,6 +167,19 @@ Fill a buffer with cryptographically secure random bytes. Uses the OS-provided C
 pub fn fill(buf: []u8) !void
 ```
 
+## `root.zig`
+*Zig package API for zig-crypto.*
+
+### Constants
+
+- `aes` -- AES-128/256-CBC helpers.
+- `ecdh` -- ECDH P-256 key agreement.
+- `ed25519` -- Ed25519 key generation, signing, and verification.
+- `hmac` -- HMAC-SHA-256 message authentication.
+- `pbkdf2` -- PBKDF2-HMAC-SHA1 key derivation.
+- `random` -- OS-backed cryptographically secure random bytes.
+- `sha256` -- SHA-256 hashing.
+
 ## `sha256.zig`
 *SHA-256 hash*
 

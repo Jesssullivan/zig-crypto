@@ -1,6 +1,6 @@
 .{
     .name = .zig_crypto,
-    .version = "0.1.0",
+    .version = "0.1.1",
     .fingerprint = 0x2478f30211f15cf6,
     .minimum_zig_version = "0.15.2",
     .dependencies = .{},
@@ -10,6 +10,7 @@
         "src",
         "include",
         "tests",
+        "examples",
         "LICENSE",
         "README.md",
     },

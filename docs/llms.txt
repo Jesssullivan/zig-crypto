@@ -8,7 +8,11 @@ zig-crypto provides SHA-256, HMAC-SHA-256, AES-128/256-CBC, PBKDF2-SHA1, ECDH P-
 
 It is the crypto proof for the Tinyland Zig Libraries pattern: small native libraries with documented FFI contracts that let applications move framework-bound capabilities behind portable, auditable interfaces for macOS and Linux.
 
-Positioning: use Zig as a hermetic FFI surface for de-attesting Apple/SwiftUI or other ecosystem-specific native capabilities into portable C ABI contracts that can also be implemented and tested on Linux.
+Positioning: use Zig as a hermetic FFI surface for stable native capability contracts. In Tinyland planning, this supports de-attesting Apple ecosystem crypto calls into portable C ABI boundaries while SwiftUI, UIKit, AppKit, Cocoa, or Objective-C code keeps presentation and lifecycle ownership.
+
+Apple analogs available today: CryptoKit SHA-256, HMAC-SHA-256, P-256 ECDH primitive shape, and `Curve25519.Signing` Ed25519-style signing shape.
+
+CommonCrypto-style SHA/HMAC, AES-CBC, and PBKDF2-SHA1 are separate migration analogs. Security.framework-style random bytes map to `zig_crypto_random`. Gaps: no SwiftPM/modulemap wrapper, Swift `Data` convenience layer, Objective-C wrapper/nullability pass, `NSError` bridge, CommonCrypto-compatible drop-in header, CryptoKit `SharedSecret`/HKDF/key-type parity, CryptoKit AES-GCM/key-wrap parity, or streaming C ABI contexts.
 
 ## Key Facts
 
@@ -63,4 +67,5 @@ CSPRNG:
 ## Links
 
 - Repository: https://github.com/Jesssullivan/zig-crypto
-- Documentation: https://libs.tinyland.dev/zig-crypto/
+- Documentation: https://transscendsurvival.org/zig-crypto/
+- Documentation source: https://github.com/Jesssullivan/zig-crypto/tree/main/docs

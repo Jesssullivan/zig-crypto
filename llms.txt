@@ -2,11 +2,15 @@
 
 > Portable cryptographic primitives in Zig with a stable C FFI -- SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG. No OpenSSL. No CommonCrypto. No system crypto dependencies.
 
-Part of the [Tinyland Zig Libraries](https://libs.tinyland.dev).
+Part of the Tinyland Zig Libraries.
 
 zig-crypto is the pure-Zig crypto proof for a family of small native capability layers. The pattern is a hermetic Zig implementation, a stable C ABI for app integration, and a Zig package root for direct Zig consumers.
 
-Positioning: Zig provides the de-attestation layer between Apple/SwiftUI or other ecosystem-specific app developer experience and portable Linux-capable native implementations.
+Positioning: the C ABI is the stable boundary between app developer experience and native crypto implementation. In Tinyland planning this supports de-attestation: SwiftUI, UIKit, AppKit, Cocoa, or Objective-C apps keep their presentation and lifecycle code while Apple-shaped crypto calls move behind portable Zig contracts.
+
+Available Apple analogs: CryptoKit SHA-256, HMAC-SHA-256, P-256 ECDH primitive shape, and `Curve25519.Signing` Ed25519-style signing shape.
+
+CommonCrypto-style SHA/HMAC, AES-CBC, and PBKDF2-SHA1 are separate migration analogs. Security.framework-style random bytes map to `zig_crypto_random`. Swift/ObjC parity gaps remain for SwiftPM/modulemap packaging, Swift `Data` wrappers, Objective-C samples/nullability, `NSError` bridging, CommonCrypto-compatible aliases, CryptoKit `SharedSecret`/HKDF/key-type parity, CryptoKit AES-GCM/key-wrap parity, and streaming C contexts.
 
 ## Installation
 
@@ -16,9 +20,11 @@ zig fetch --save git+https://github.com/Jesssullivan/zig-crypto.git
 
 ## Full Documentation
 
-- [Documentation](https://libs.tinyland.dev/zig-crypto/): MkDocs site
-- [C FFI reference](https://libs.tinyland.dev/zig-crypto/api/c-ffi/): C ABI docs
-- [Zig API reference](https://libs.tinyland.dev/zig-crypto/api/zig-api/): Zig module docs
+- [Documentation](https://transscendsurvival.org/zig-crypto/): Published docs site
+- [Documentation source](https://github.com/Jesssullivan/zig-crypto/tree/main/docs): Markdown source
+- [C FFI reference](https://transscendsurvival.org/zig-crypto/api/c-ffi/): C ABI docs
+- [Zig API reference](https://transscendsurvival.org/zig-crypto/api/zig-api/): Zig module docs
+- [Apple interop guide](https://transscendsurvival.org/zig-crypto/guides/apple-interop/): Swift/ObjC analogs, parity gaps, and good first issues
 - [llms-full.txt](https://raw.githubusercontent.com/Jesssullivan/zig-crypto/main/llms-full.txt): Complete API dump for LLMs
 - [AGENTS.md](https://github.com/Jesssullivan/zig-crypto/blob/main/AGENTS.md): Agent instructions
 

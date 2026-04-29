@@ -3,17 +3,38 @@
 Portable cryptographic primitives in Zig with a stable C FFI -- SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG.
 
 - **License:** Zlib OR MIT
-- **Docs:** <https://libs.tinyland.dev/zig-crypto/>
+- **Docs:** <https://transscendsurvival.org/zig-crypto/> ([source](docs/)).
 
 ## Why
 
 zig-crypto is a small native capability layer for applications that need portable crypto without binding core behavior to one platform's framework surface. It compiles to a static library, exposes a narrow C ABI, and uses Zig's `std.crypto` instead of OpenSSL, CommonCrypto, or other system crypto dependencies.
 
-It is part of the Tinyland Zig Libraries pattern: use Zig to build hermetic native libraries with stable FFI contracts so Swift, C, C++, Zig, Python, GTK, WebKit, or other application layers can share the same primitives across macOS and Linux. The goal is portability and auditability: keep app-level developer experience intact while moving framework-bound capabilities behind small, documented native interfaces.
+It is part of the Tinyland Zig Libraries pattern: use Zig to build hermetic native libraries with stable FFI contracts so Swift, C, C++, Zig, Python, GTK, WebKit, or other application layers can call the same primitive surface across macOS and Linux. The goal is portability and auditability: keep app-level developer experience intact while moving framework-bound capabilities behind small, documented native interfaces.
 
-Framed as de-attestation, Zig owns the native capability contract while application code keeps its presentation and workflow layer. A SwiftUI, Cocoa, GTK, or WebKit app can move Apple-only crypto, keychain, notification, or CTAP2 assumptions behind a C ABI that can also be implemented and tested on Linux, without rewriting the whole application around one ecosystem's APIs.
+In Tinyland planning, this is the de-attestation direction: app code keeps its presentation and workflow layer while Zig owns the native capability contract. For this repo, the proven scope is crypto. A SwiftUI, Cocoa, UIKit, Objective-C, GTK, WebKit, or CLI app can call `zig_crypto.h` through the same C ABI instead of binding crypto behavior directly to one ecosystem's crypto APIs.
 
-zig-crypto is the pure-Zig crypto proof in that family. Sibling libraries apply the same shape to keychain storage, desktop notifications, and CTAP2/WebAuthn-style device flows.
+Sibling libraries are related work for keychain storage, desktop notifications, and CTAP2/WebAuthn-style device flows. They follow the same boundary pattern, but each repo should be evaluated on its own implementation, package, and platform support.
+
+## Apple / Swift / Objective-C Parity
+
+zig-crypto does not replace SwiftUI, UIKit, AppKit, or Cocoa application structure. It replaces the crypto capability calls that those apps would otherwise route through Apple-specific frameworks.
+
+| Apple ecosystem surface | zig-crypto surface | Status |
+|-------------------------|--------------------|--------|
+| CryptoKit `SHA256`, CommonCrypto `CC_SHA256` | `zig_crypto_sha256`, `zig_crypto_sha256_hex` | Available |
+| CryptoKit `HMAC<SHA256>`, CommonCrypto `CCHmac` | `zig_crypto_hmac_sha256` | Available |
+| CommonCrypto `CCCrypt` / `CCCryptor` AES-CBC with PKCS#7 | AES-128/256-CBC encrypt/decrypt | Available |
+| CommonCrypto `CCKeyDerivationPBKDF` PBKDF2-SHA1 workflows | `zig_crypto_pbkdf2_sha1` | Available |
+| CryptoKit `P256.KeyAgreement` ECDH primitive | `zig_crypto_p256_generate`, `zig_crypto_p256_ecdh` | Available for the documented CTAP2-style `SHA-256(x-coordinate)` shared secret, not CryptoKit `SharedSecret` / HKDF API parity |
+| CryptoKit `Curve25519.Signing` Ed25519-style signing | Ed25519 generate/from-seed/sign/verify | Available through C ABI raw key bytes, not Swift key types |
+| Security.framework `SecRandomCopyBytes` | `zig_crypto_random` | Available |
+
+Known Swift/ObjC parity gaps are intentionally small and suitable for first issues:
+
+- Add a SwiftPM/modulemap wrapper and Swift smoke test for importing `zig_crypto.h`.
+- Add Objective-C sample code and header annotations for a cleaner ObjC/Swift bridge.
+- Add side-by-side CryptoKit/CommonCrypto migration examples for the supported primitives.
+- Document non-goals clearly: no Swift `Data` convenience layer, no `NSError` bridge, no CommonCrypto-compatible symbol names, no CryptoKit AES-GCM/HKDF/`SharedSecret`/Swift-key parity, and no Secure Enclave/keychain/notification/AuthenticationServices/CTAP2 transport in this repo.
 
 ## Features
 
@@ -103,20 +124,20 @@ With [just](https://just.systems): `just test-all`, `just build`, `just info`.
 
 | Platform | Status | Notes |
 |----------|--------|-------|
-| macOS (arm64/x86_64) | Tested | No frameworks needed |
-| Linux (x86_64/arm64) | Supported | No system libraries needed |
+| macOS | Supported | No frameworks needed |
+| Linux | Supported | No system crypto libraries needed |
 | Cross-compilation | Supported | Pure Zig, no platform dependencies |
 
 ## Tinyland Zig Libraries
 
-The library family targets small native surfaces that are often tangled with platform frameworks or entitlement/provisioning flows:
+The library family targets small native surfaces that are often tangled with platform frameworks or entitlement/provisioning flows. `zig-crypto` is the crypto proof in that pattern; sibling libraries are related work with their own implementation and platform-support status.
 
-| Library | Surface | Portable role |
-|---------|---------|---------------|
+| Library | Surface | Current role |
+|---------|---------|--------------|
 | `zig-crypto` | Crypto primitives | Pure Zig static library and C ABI for hashes, MACs, AES, PBKDF2, P-256, Ed25519, and CSPRNG |
-| `zig-keychain` | Secret storage | C ABI for macOS Security.framework-style keychain storage and Linux Secret Service/libsecret |
-| `zig-notify` | Desktop notifications | C ABI for platform notification delivery |
-| `zig-ctap2` | FIDO2/WebAuthn device flows | C ABI for CTAP2 HID, makeCredential/getAssertion, and PIN protocol |
+| `zig-keychain` | Secret storage | Related boundary target for keychain/secret storage portability |
+| `zig-notify` | Desktop notifications | Related boundary target for notification portability |
+| `zig-ctap2` | FIDO2/WebAuthn device flows | Related boundary target for CTAP2 HID and PIN protocol flows |
 
 Each library should stay small enough to audit, package, and link independently.
 

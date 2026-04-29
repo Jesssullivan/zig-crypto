@@ -2,9 +2,7 @@
  * zig-crypto example: SHA-256 hashing and Ed25519 signing.
  *
  * Build:
- *   cd .. && zig build -Doptimize=ReleaseFast
- *   cc examples/hash_and_sign.c -Iinclude -Lzig-out/lib -lzig-crypto -o examples/hash_and_sign
- *   ./examples/hash_and_sign
+ *   zig build example
  */
 
 #include "zig_crypto.h"

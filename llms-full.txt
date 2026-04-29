@@ -2,11 +2,23 @@
 
 > Portable cryptographic primitives in Zig with a stable C FFI -- SHA-256, HMAC-SHA-256, AES-CBC, PBKDF2, ECDH P-256, Ed25519, and CSPRNG. No OpenSSL. No CommonCrypto. No system crypto dependencies.
 
-Part of the [Tinyland Zig Libraries](https://libs.tinyland.dev). License: Zlib OR MIT.
+Part of the Tinyland Zig Libraries. License: Zlib OR MIT.
 
-zig-crypto is the pure-Zig crypto proof for a family of small native capability layers. The shared pattern is a hermetic Zig implementation, a stable C ABI for app integration, and a Zig package root for direct Zig consumers. Sibling libraries apply the same approach to keychain storage, desktop notifications, and CTAP2/WebAuthn-style device flows.
+zig-crypto is the pure-Zig crypto proof for a family of small native capability layers. The shared pattern is a hermetic Zig implementation, a stable C ABI for app integration, and a Zig package root for direct Zig consumers. Sibling libraries target the same approach for keychain storage, desktop notifications, and CTAP2/WebAuthn-style device flows, with their own implementation and platform-support status.
 
-Positioning: Zig provides the de-attestation layer between Apple/SwiftUI or other ecosystem-specific app developer experience and portable Linux-capable native implementations. The C ABI is the stable contract; the Zig implementation is the hermetic capability surface.
+Positioning: the C ABI is the stable contract between app developer experience and native crypto implementation. In Tinyland planning, this supports de-attestation: SwiftUI, UIKit, AppKit, Cocoa, or Objective-C apps keep presentation and lifecycle code while Apple-shaped crypto calls move behind portable Zig contracts that can be built and tested outside one platform's framework assumptions.
+
+Apple analogs available today:
+
+- CryptoKit `SHA256` and CommonCrypto `CC_SHA256` -> `zig_crypto_sha256`, `zig_crypto_sha256_hex`
+- CryptoKit `HMAC<SHA256>` and CommonCrypto `CCHmac` -> `zig_crypto_hmac_sha256`
+- CommonCrypto `CCCrypt` / `CCCryptor` AES-CBC with PKCS#7 -> AES-128/256-CBC encrypt/decrypt
+- CommonCrypto `CCKeyDerivationPBKDF` PBKDF2-SHA1 workflows -> `zig_crypto_pbkdf2_sha1`
+- CryptoKit `P256.KeyAgreement` ECDH primitive -> `zig_crypto_p256_generate`, `zig_crypto_p256_ecdh` for the documented CTAP2-style `SHA-256(x-coordinate)` shared secret, not CryptoKit `SharedSecret` / HKDF API parity
+- CryptoKit `Curve25519.Signing` Ed25519-style signing -> Ed25519 generate/from-seed/sign/verify through C ABI raw key bytes, not Swift key types
+- Security.framework `SecRandomCopyBytes` -> `zig_crypto_random`
+
+Swift/ObjC parity gaps suitable for good first issues: SwiftPM/modulemap import wrapper, Swift smoke tests, Objective-C sample code, header nullability annotations, and side-by-side CryptoKit/CommonCrypto migration examples. Larger API-design gaps include Swift `Data` wrappers, `NSError` bridging, CommonCrypto-compatible aliases, binary/XCFramework packaging, CryptoKit `SharedSecret`/HKDF/key-type parity, CryptoKit AES-GCM/key-wrap parity, and streaming C contexts.
 
 ## Installation
 
@@ -157,4 +169,4 @@ zig build example                # build and run C example
 
 ## Platform Support
 
-Cross-platform. Pure Zig `std.crypto`, no system crypto dependencies. Tested on macOS (arm64/x86_64) and Linux (x86_64/arm64).
+Cross-platform. Pure Zig `std.crypto`, no system crypto dependencies.

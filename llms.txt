@@ -1,0 +1,71 @@
+# zig-crypto
+
+> Portable cryptographic primitives in Zig with a stable C FFI
+
+## Overview
+
+zig-crypto provides SHA-256, HMAC-SHA-256, AES-128/256-CBC, PBKDF2-SHA1, ECDH P-256, Ed25519, and CSPRNG -- all as pure Zig with a stable C ABI for integration into Swift, C, C++, Zig, Python, GTK, WebKit, and other application layers.
+
+It is the crypto proof for the Tinyland Zig Libraries pattern: small native libraries with documented FFI contracts that let applications move framework-bound capabilities behind portable, auditable interfaces for macOS and Linux.
+
+Positioning: use Zig as a hermetic FFI surface for stable native capability contracts. In Tinyland planning, this supports de-attesting Apple ecosystem crypto calls into portable C ABI boundaries while SwiftUI, UIKit, AppKit, Cocoa, or Objective-C code keeps presentation and lifecycle ownership.
+
+Apple analogs available today: CryptoKit SHA-256, HMAC-SHA-256, P-256 ECDH primitive shape, and `Curve25519.Signing` Ed25519-style signing shape.
+
+CommonCrypto-style SHA/HMAC, AES-CBC, and PBKDF2-SHA1 are separate migration analogs. Security.framework-style random bytes map to `zig_crypto_random`. Gaps: no SwiftPM/modulemap wrapper, Swift `Data` convenience layer, Objective-C wrapper/nullability pass, `NSError` bridge, CommonCrypto-compatible drop-in header, CryptoKit `SharedSecret`/HKDF/key-type parity, CryptoKit AES-GCM/key-wrap parity, or streaming C ABI contexts.
+
+## Key Facts
+
+- Language: Zig 0.15.2+
+- Platforms: macOS, Linux (pure Zig, no platform deps except CSPRNG)
+- License: Zlib OR MIT
+- API: C FFI via zig_crypto.h, Zig package API via src/root.zig
+
+## C API Summary
+
+SHA-256:
+- zig_crypto_sha256() -- compute hash (32 bytes)
+- zig_crypto_sha256_hex() -- compute hash as hex string (64 chars)
+
+HMAC-SHA-256:
+- zig_crypto_hmac_sha256() -- keyed MAC (32 bytes)
+
+AES-CBC:
+- zig_crypto_aes128_cbc_encrypt/decrypt() -- AES-128 with PKCS#7
+- zig_crypto_aes256_cbc_encrypt/decrypt() -- AES-256 with PKCS#7
+- zig_crypto_aes256_cbc_encrypt_raw/decrypt_raw() -- AES-256 no padding (for CTAP2)
+
+PBKDF2:
+- zig_crypto_pbkdf2_sha1() -- key derivation
+
+ECDH P-256:
+- zig_crypto_p256_generate() -- ephemeral key pair
+- zig_crypto_p256_ecdh() -- shared secret derivation
+
+Ed25519:
+- zig_crypto_ed25519_generate() -- random key pair
+- zig_crypto_ed25519_from_seed() -- deterministic key pair
+- zig_crypto_ed25519_sign() -- sign message
+- zig_crypto_ed25519_verify() -- verify signature
+
+CSPRNG:
+- zig_crypto_random() -- fill buffer with secure random bytes
+
+## Source Files
+
+- src/ffi.zig -- C FFI exports
+- src/root.zig -- Zig package API root
+- src/sha256.zig -- SHA-256
+- src/hmac.zig -- HMAC-SHA-256
+- src/aes.zig -- AES-128/256-CBC
+- src/pbkdf2.zig -- PBKDF2-SHA1
+- src/ecdh.zig -- ECDH P-256
+- src/ed25519.zig -- Ed25519
+- src/random.zig -- CSPRNG
+- include/zig_crypto.h -- C header
+
+## Links
+
+- Repository: https://github.com/Jesssullivan/zig-crypto
+- Documentation: https://transscendsurvival.org/zig-crypto/
+- Documentation source: https://github.com/Jesssullivan/zig-crypto/tree/main/docs

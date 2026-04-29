@@ -1,5 +1,13 @@
 # Contributing to zig-crypto
 
+## Where to Start
+
+The best entry points are issues labeled [`good first issue`](https://github.com/Jesssullivan/zig-crypto/labels/good%20first%20issue). These are scoped for contributors who want to improve Swift/Objective-C interop, examples, docs, or header ergonomics without changing cryptographic behavior.
+
+Issues labeled [`help wanted`](https://github.com/Jesssullivan/zig-crypto/labels/help%20wanted) are also open for contributor help, but may require more context or API design.
+
+Read the [Apple interop guide](docs/guides/apple-interop.md) before working on Swift, Objective-C, CryptoKit, CommonCrypto, or Security.framework migration examples. It defines what is available today and what is intentionally out of scope.
+
 ## Installation
 
 ### Zig Package Manager (recommended)
@@ -59,7 +67,9 @@ zig build example                # build and run C example
 
 ## Filing Issues
 
-Open an issue at [github.com/Jesssullivan/zig-crypto/issues](https://github.com/Jesssullivan/zig-crypto/issues).
+Open an issue at [github.com/Jesssullivan/zig-crypto/issues](https://github.com/Jesssullivan/zig-crypto/issues). Use the issue templates when possible; they are there to keep reports actionable.
+
+For security-sensitive reports, do not paste secrets, keys, tokens, credentials, private logs, or unpublished vulnerability details into a public issue.
 
 ## License
 

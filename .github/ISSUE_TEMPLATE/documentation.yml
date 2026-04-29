@@ -1,0 +1,45 @@
+name: Documentation or interop gap
+description: Request a docs, example, Swift/ObjC, CryptoKit, or CommonCrypto improvement.
+title: "docs: "
+labels:
+  - documentation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for docs and interop gaps. For current Apple analogs and non-goals, read https://transscendsurvival.org/zig-crypto/guides/apple-interop/.
+  - type: textarea
+    id: gap
+    attributes:
+      label: Gap
+      description: What is missing or unclear?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Apple / Swift / Objective-C interop
+        - C ABI reference
+        - Zig package API
+        - CryptoKit migration example
+        - CommonCrypto migration example
+        - Build or installation docs
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed change
+      description: Describe the example, section, or clarification you want to add.
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This does not claim SwiftUI, UIKit, AppKit, or Cocoa replacement.
+        - label: This does not claim CryptoKit AES-GCM, HKDF, SharedSecret, Secure Enclave, Keychain Services, notifications, AuthenticationServices, or CTAP2 transport support in this repo.

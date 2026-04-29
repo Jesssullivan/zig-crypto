@@ -36,6 +36,12 @@ Known Swift/ObjC parity gaps are intentionally small and suitable for first issu
 - Add side-by-side CryptoKit/CommonCrypto migration examples for the supported primitives.
 - Document non-goals clearly: no Swift `Data` convenience layer, no `NSError` bridge, no CommonCrypto-compatible symbol names, no CryptoKit AES-GCM/HKDF/`SharedSecret`/Swift-key parity, and no Secure Enclave/keychain/notification/AuthenticationServices/CTAP2 transport in this repo.
 
+## Contributing
+
+Contributor work should keep the C ABI stable, preserve the Zig 0.15.2 build path, and avoid adding system crypto dependencies. Start with the [good first issue queue](https://github.com/Jesssullivan/zig-crypto/labels/good%20first%20issue), especially the Swift/Objective-C interop gaps called out in the [Apple interop guide](docs/guides/apple-interop.md).
+
+Before opening a change, run the focused validation commands from [CONTRIBUTING.md](CONTRIBUTING.md). For larger API or packaging changes, open an issue first so the C ABI, Zig package API, and documentation impact can be scoped together.
+
 ## Features
 
 - **SHA-256**: Single-shot and incremental hashing, hex output
